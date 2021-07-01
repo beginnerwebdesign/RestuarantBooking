@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurant</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <style>
+    h1,
+    h2 {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="jumbotron">
+      <% var selectedRestuarant="res1"; %>
+
+      <h1>Restaurant</h1>
+      <h2>Restaurant Description Forthcoming</h2>
+      <hr>
+      <form method="POST" action="/api">
+
+        <select class="restuarant form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+          <option name="rest"  value=<%= selectedRestuarant %> disabled selected>Choose your restuarant </option>
+          <% restuarantsName.forEach(function(post){ %>
+          <option><%= post.name %></option>
+          <% })
+        %>
+        </select>
+        <input id='lastname' type="hidden" name="lastname" %> >
+        <!-- <button type="submit" class="btn">submit</button> -->
+
+        <h2 id="fullmessage"> We only have <span id="tablesleft"> </span> table left! Reserve now! </h2>
+        <br>
+        <a href="/register"><button type="button" class="btn btn-cautions btn-lg"><span
+              class="glyphicon glyphicon-plus"></span> Register for adding Restaurant </button></a>
+        <a href="/reserve"><button type="submit" class="btn btn-danger btn-lg"><span
+              class="glyphicon glyphicon-plus"></span> Make Reservation</button></a>
+        <a href="/tables"><button type="button" class="btn btn-cautions btn-lg"><span
+              class="glyphicon glyphicon-plus"></span> Tables </button></a>
+      </form>
+    </div>
+
+    <script type="text/javascript">
+      // Getting current table data and notifying how many tables left.
+      $.get("/tabledata", function (data) {
+        var parsedData = JSON.parse(data);
+        console.log(parsedData);
+        var remainingTables = 5 - parsedData.tables.length;
+        $("#tablesleft").html(remainingTables);
+
+        if (remainingTables < 1) {
+          $("#fullmessage").html("No tables left, please sign up for the waiting list.");
+        }
+
+      });
+      $(document).ready(function () {
+        $("select.restuarant").change(function () {
+          selectedRestuarant = $(this).children("option:selected").val()
+          console.log(selectedRestuarant)
+          document.getElementById('lastname').value = selectedRestuarant
+
+
+        });
+
+      });
+    </script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>

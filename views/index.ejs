@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurant</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <style>
+body {
+  background-image: url("https://images.creativemarket.com/0.1.0/ps/7358571/1820/1213/m1/fpnw/wm1/yhkghshrdewym9cqaf6dydfgaym5exkmox3demunpyzo6v0nfog8cwdotjqhyb1w-.jpg?1574657243&s=63f255806cf9d9dfa9c86f3d340cce03");
+  background-repeat: cover;
+  
+}
+.navbar {
+      background-color: transparent;
+      background: transparent;
+    }
+    .nav-link{
+      color:white;
+      font-size: 200%;
+      text-decoration: none;
+    }
+    .nav-item :hover,.nav-item :active{
+      background-color: coral;
+      text-decoration: none;
+      color:white;
+      border-radius: 5px;
+    }
+    .nav-item{
+      padding-right: 20px;
+    }
+    #mydiv {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        color: white;
+        font-size: larger;
+        transform: translate(-50%, -50%);
+        
+    }
+    .inside {
+  width: auto;
+  height: auto;
+  position: relative;
+  align-items: center;
+  left: 25%;
+}
+    #title{
+      font-family: Georgia, serif;
+      color: coral;
+    }
+    *{
+      color: #ccc;
+    }
+    
+  </style>
+  </head>
+  <body>
+    <% var selectedRestuarant="res1"; %>
+    <div class="container">
+      <nav class="navbar navbar-expand-lg ">
+        <!-- <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button> -->
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ">
+            <li class="nav-item active">
+              <a class="nav-link" href="/"> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/tables">Tables</a>
+            </li>
+            
+          </ul>
+          
+        </div>
+      </nav>
+    </div>
+    <div class="container" id="mydiv">
+      <div class="inside container" >
+        <h1 id="title">Welcome</h1>
+        <h1>WE EAT REASTUARANT</h1>
+        </div>
+      <form method="POST" action="/api">
+        
+
+        <select class="restuarant form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+          <option name="rest"  value=<%= selectedRestuarant %> disabled selected>Choose your restuarant </option>
+          <% restuarantsName.forEach(function(post){ %>
+          <option><%= post.name %></option>
+          <% })
+        %>
+        </select>
+        <input id='lastname' type="hidden" name="lastname" %> >
+        <div class="inside container">
+        <a href="/reserve"><button type="submit" class="btn btn-danger btn-lg"><span
+          class="glyphicon glyphicon-plus"></span> Book Table</button></a>
+        <h2 id="fullmessage"> We only have <span id="tablesleft"> </span> table left! Reserve now! </h2>
+        </div>
+        </form>
+
+    </div>
+    <script type="text/javascript">
+      // Getting current table data and notifying how many tables left.
+      $.get("/tabledata", function (data) {
+        var parsedData = JSON.parse(data);
+        console.log(parsedData);
+        var remainingTables = 5 - parsedData.tables.length;
+        $("#tablesleft").html(remainingTables);
+
+        if (remainingTables < 1) {
+          $("#fullmessage").html("No tables left, please sign up for the waiting list.");
+        }
+
+      });
+      $(document).ready(function () {
+        $("select.restuarant").change(function () {
+          selectedRestuarant = $(this).children("option:selected").val()
+          console.log(selectedRestuarant)
+          document.getElementById('lastname').value = selectedRestuarant
+
+
+        });
+
+      });
+    </script>
+      
+  </body>
+  </html>
